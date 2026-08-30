@@ -1,0 +1,19 @@
+{
+  "name": "production-patterns",
+  "version": "1.0.0",
+  "description": "Review code against a growing library of production system-design lessons — the failure modes that only appear under concurrency, retries, and timeouts",
+  "author": {
+    "name": "tiktuzki",
+    "url": "https://www.tiktuzki.com"
+  },
+  "homepage": "https://github.com/TikTzuki/senior-architect/tree/main/plugins/production-patterns",
+  "repository": "https://github.com/TikTzuki/senior-architect",
+  "license": "Apache-2.0",
+  "keywords": [
+    "review",
+    "system-design",
+    "production",
+    "architecture",
+    "scalability"
+  ]
+}

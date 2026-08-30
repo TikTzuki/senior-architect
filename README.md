@@ -27,17 +27,18 @@ Add the marketplace once, then install whichever plugins you want:
 /plugin install vibe-generate@senior-architect
 ```
 
-Each plugin is independent — install one, install all five, uninstall any of them without touching the rest.
+Each plugin is independent — install one, install all six, uninstall any of them without touching the rest.
 
 ## Plugins
 
-| Plugin               | What it does                                                                                       | Requires            |
-|----------------------|----------------------------------------------------------------------------------------------------|---------------------|
-| **`vibe-generate`**  | Scaffold production-ready projects from curated templates (Next.js 16, Rust 2024, Spring Boot 4.0) | `vibe-generate` CLI |
-| **`tmux`**           | Drive interactive CLIs by sending keystrokes to tmux panes and scraping their output               | `tmux`              |
-| **`gog`**            | Gmail, Calendar, Drive, Contacts, Sheets, and Docs from the terminal                               | `gog`               |
-| **`docflu`**         | Sync Docusaurus markdown to Confluence, Google Docs, or Notion — diagrams included                 | `docflu`, `node`    |
-| **`skill-creator`**  | Create, structure, validate, and package Agent Skills                                              | —                   |
+| Plugin                    | What it does                                                                                           | Requires            |
+|---------------------------|--------------------------------------------------------------------------------------------------------|---------------------|
+| **`vibe-generate`**       | Scaffold production-ready projects from curated templates (Next.js 16, Rust 2024, Spring Boot 4.0)     | `vibe-generate` CLI |
+| **`tmux`**                | Drive interactive CLIs by sending keystrokes to tmux panes and scraping their output                   | `tmux`              |
+| **`gog`**                 | Gmail, Calendar, Drive, Contacts, Sheets, and Docs from the terminal                                   | `gog`               |
+| **`docflu`**              | Sync Docusaurus markdown to Confluence, Google Docs, or Notion — diagrams included                     | `docflu`, `node`    |
+| **`skill-creator`**       | Create, structure, validate, and package Agent Skills                                                  | —                   |
+| **`production-patterns`** | Review code against production failure modes that only appear under concurrency, retries, and timeouts | —                   |
 
 Install any of them the same way:
 
@@ -165,6 +166,38 @@ plugins/my-plugin/
 
 Templates are just directories of real project files — no config format, no template language, one placeholder.
 
+## The production-patterns knowledge base
+
+`production-patterns` is not only a review skill — it carries the largest body of writing in this
+repo. `plugins/production-patterns/skills/production-review/references/` holds **41 lessons** on
+production failure modes, each one distilled from a studied source series and tracked in
+[ROADMAP.md](ROADMAP.md).
+
+Those files are the source of truth and stay inside the plugin, because `SKILL.md` links them by
+relative path and `${CLAUDE_PLUGIN_ROOT}` has to resolve for anyone who installs from the
+marketplace. They are **also** published as readable documentation at
+[tiktuzki.com/docs/production-patterns](https://www.tiktuzki.com/docs/production-patterns), copied
+in at build time by the `TikTzuki` repo. Edit them here; the site follows.
+
+Site metadata for all 41 — title, which of the seven sets it belongs to, and its tags —
+lives in [`knowledge-map.yaml`](knowledge-map.yaml) at the repo root, **not** in the lesson
+files. The site's sync injects it into its own copy, so these stay plain markdown: 347
+relative links run between them and the plugin resolves them through
+`${CLAUDE_PLUGIN_ROOT}`, so both their content and their location are load-bearing.
+
+Adding a lesson means adding a `knowledge-map.yaml` entry too — see step 6 of the
+`lesson-add` skill. Without it the lesson still works here but reaches the site untagged.
+
+To publish an edit immediately rather than waiting for the nightly rebuild:
+
+```bash
+gh api repos/TikTzuki/TikTzuki/dispatches -f event_type=knowledge-updated
+```
+
+Source material for those lessons lives in `dev-insider-docs/`, which is **gitignored on
+purpose** — it is paid subscriber content and is not redistributable. The lessons are original
+writing derived from it; the sources are not published, mirrored, or committed.
+
 ## Repository Structure
 
 ```
@@ -178,7 +211,11 @@ senior-architect/
 │   ├── tmux/
 │   ├── gog/
 │   ├── docflu/
-│   └── skill-creator/
+│   ├── skill-creator/
+│   └── production-patterns/
+│       ├── skills/production-review/
+│       │   └── references/  # 41 lessons — source of truth, mirrored to the site
+│       └── skills/roadmap/
 ├── crates/
 │   └── vibe-generate/       # Rust CLI behind the vibe-generate plugin
 │       └── src/
@@ -189,6 +226,8 @@ senior-architect/
 │   ├── nextjs/
 │   ├── rust-1.9/
 │   └── java-25/
+├── knowledge-map.yaml       # site metadata for the 41 lessons (titles, sets, tags)
+├── dev-insider-docs/        # GITIGNORED source material — subscriber content
 └── .github/workflows/       # cross-platform release CI
 ```
 

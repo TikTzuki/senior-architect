@@ -89,6 +89,23 @@
       "author": {
         "name": "tiktuzki"
       }
+    },
+    {
+      "name": "production-patterns",
+      "source": "./plugins/production-patterns",
+      "description": "Review code against a growing library of production system-design lessons \u2014 the failure modes that only appear under concurrency, retries, and timeouts",
+      "version": "1.0.0",
+      "category": "review",
+      "keywords": [
+        "review",
+        "system-design",
+        "production",
+        "architecture",
+        "scalability"
+      ],
+      "author": {
+        "name": "tiktuzki"
+      }
     }
   ]
 }

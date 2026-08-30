@@ -1,0 +1,237 @@
+# Site metadata for the 41 production-pattern lessons.
+#
+# Read by TikTzuki/scripts/sync-knowledge.sh, which INJECTS this as Docusaurus front
+# matter into its copy of each lesson at build time. The lesson files themselves stay
+# clean plain markdown with no front matter, because:
+#
+#   - production-review/SKILL.md links all 41 by RELATIVE path and the plugin resolves
+#     them through ${CLAUDE_PLUGIN_ROOT}; the files' content and location are load-bearing
+#     for anyone who installs from the marketplace.
+#   - 347 relative links run between these files, 100 of them crossing a set boundary,
+#     so the "sets" are a graph, not a folder structure. They are tags, not directories.
+#
+# `group` drives the sidebar sub-grouping built in TikTzuki/tik_space/sidebars.ts, so the
+# seven sets show up as seven sidebar groups without a single file moving.
+#
+# Tags must exist in TikTzuki/tik_space/docs/tags.yml or the site build fails.
+
+groups:
+  runtime: Backend runtime
+  storage: Storage & databases
+  transactions: Transactions & consistency
+  data-modeling: Data modeling
+  api-design: API design
+  distributed-systems: Distributed systems
+  payments: Payments
+
+lessons:
+  large-file-upload.md:
+    title: Large File Upload
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 1
+  server-concurrency-model.md:
+    title: Server Concurrency Model
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 2
+  memory-and-gc.md:
+    title: "Memory & Garbage Collection"
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 3
+  caching.md:
+    title: "Caching & Cache Stampede"
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 4
+  distributed-locks.md:
+    title: Distributed Locks
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 5
+  health-checks-and-load-balancing.md:
+    title: "Health Checks, Discovery & Load Balancing"
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 6
+  deployment-and-config.md:
+    title: "Deployment & Configuration"
+    group: runtime
+    tags: [ runtime, tier-1-foundations ]
+    sidebar_position: 7
+  storage-engines.md:
+    title: Storage Engines
+    group: storage
+    tags: [ storage, tier-1-foundations ]
+    sidebar_position: 1
+  replication-and-sharding.md:
+    title: "Replication & Sharding"
+    group: storage
+    tags: [ storage, tier-2-distributed ]
+    sidebar_position: 2
+  session-consistency.md:
+    title: "Session Consistency: Read-Your-Writes, Monotonic Reads & Causal Order"
+    group: storage
+    tags: [ storage, distributed-systems, tier-2-distributed ]
+    sidebar_position: 3
+  connection-pools-and-latency.md:
+    title: "Connection Pools & Latency"
+    group: storage
+    tags: [ storage, tier-1-foundations ]
+    sidebar_position: 4
+  lock-contention.md:
+    title: "Locks, Deadlocks & Long Transactions"
+    group: storage
+    tags: [ storage, tier-1-foundations ]
+    sidebar_position: 5
+  indexes-and-query-plans.md:
+    title: "Indexes & Query Plans"
+    group: storage
+    tags: [ storage, tier-1-foundations ]
+    sidebar_position: 6
+  schema-migrations.md:
+    title: Schema Migrations Under Load
+    group: storage
+    tags: [ storage, tier-3-production-data ]
+    sidebar_position: 7
+  transaction-isolation.md:
+    title: Transaction Isolation
+    group: transactions
+    tags: [ transactions, tier-1-foundations ]
+    sidebar_position: 1
+  transaction-atomicity-and-durability.md:
+    title: "Atomicity & Durability"
+    group: transactions
+    tags: [ transactions, tier-1-foundations ]
+    sidebar_position: 2
+  optimistic-vs-pessimistic-locking.md:
+    title: Optimistic vs Pessimistic Locking
+    group: transactions
+    tags: [ transactions, tier-1-foundations ]
+    sidebar_position: 3
+  distributed-transactions.md:
+    title: Distributed Transactions
+    group: transactions
+    tags: [ transactions, tier-2-distributed, distributed-systems ]
+    sidebar_position: 4
+  consistency-boundaries.md:
+    title: Consistency Boundaries
+    group: transactions
+    tags: [ transactions, tier-1-foundations ]
+    sidebar_position: 5
+  data-retention-and-history.md:
+    title: "Data Retention & History"
+    group: data-modeling
+    tags: [ data-modeling, tier-1-foundations ]
+    sidebar_position: 1
+  temporal-data.md:
+    title: Temporal Data
+    group: data-modeling
+    tags: [ data-modeling, tier-1-foundations ]
+    sidebar_position: 2
+  event-sourcing-and-cqrs.md:
+    title: "Event Sourcing, Snapshots & CQRS"
+    group: data-modeling
+    tags: [ data-modeling, tier-2-distributed ]
+    sidebar_position: 3
+  message-delivery-semantics.md:
+    title: Message Delivery Semantics
+    group: data-modeling
+    tags: [ data-modeling, tier-1-foundations, messaging ]
+    sidebar_position: 4
+  api-contracts.md:
+    title: "API Contracts & Versioning"
+    group: api-design
+    tags: [ api-design, tier-2-distributed ]
+    sidebar_position: 1
+  api-resource-modeling.md:
+    title: API Resource Modeling
+    group: api-design
+    tags: [ api-design, tier-2-distributed ]
+    sidebar_position: 2
+  api-list-endpoints.md:
+    title: "List Endpoints: Pagination, Filtering & Sorting"
+    group: api-design
+    tags: [ api-design, tier-2-distributed ]
+    sidebar_position: 3
+  api-async-operations.md:
+    title: "Async & Long-Running Operations"
+    group: api-design
+    tags: [ api-design, tier-2-distributed ]
+    sidebar_position: 4
+  webhook-provider-design.md:
+    title: Webhook Provider Design
+    group: api-design
+    tags: [ api-design, tier-2-distributed, messaging ]
+    sidebar_position: 5
+  rate-limiting.md:
+    title: Rate Limiting
+    group: api-design
+    tags: [ api-design, tier-2-distributed ]
+    sidebar_position: 6
+  network-and-latency.md:
+    title: "The Network & Latency"
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed ]
+    sidebar_position: 1
+  timeouts-and-retries.md:
+    title: "Timeouts & Retries"
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed ]
+    sidebar_position: 2
+  circuit-breakers-and-bulkheads.md:
+    title: "Circuit Breakers & Bulkheads"
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed ]
+    sidebar_position: 3
+  consensus-and-leader-election.md:
+    title: "Consensus & Leader Election"
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed, consensus ]
+    sidebar_position: 4
+  designing-for-failure.md:
+    title: Designing for Failure
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed ]
+    sidebar_position: 5
+  payment-state-and-idempotency.md:
+    title: "Payment State & Idempotency"
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 1
+  payment-provider-and-webhooks.md:
+    title: "Payment Providers & Webhooks"
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 2
+  payment-order-consistency.md:
+    title: "Order & Payment Consistency"
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 3
+  payment-ledger.md:
+    title: Payment Ledger
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 4
+  payment-refunds.md:
+    title: Refunds
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 5
+  payment-reconciliation.md:
+    title: Reconciliation
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 6
+  payment-fraud-detection.md:
+    title: Fraud Detection
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 7
+  payment-settlement.md:
+    title: Settlement
+    group: payments
+    tags: [ payments, tier-4-system-design ]
+    sidebar_position: 8

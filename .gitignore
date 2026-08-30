@@ -5,3 +5,17 @@ target
 .vscode
 .nvim
 .env
+# Saved web pages used as source material
+page.html
+*.saved.html
+
+# Source material: saved subscriber content, not for redistribution
+dev-insider-docs/
+payment-posts/
+payment-system/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+.DS_Store
