@@ -215,6 +215,8 @@ senior-architect/
 │   └── production-patterns/
 │       ├── skills/production-review/
 │       │   └── references/  # 41 lessons — source of truth, mirrored to the site
+│       ├── skills/deploy-checklist/
+│       │   └── references/  # pre-deploy checklist — plugin-local, NOT mirrored
 │       └── skills/roadmap/
 ├── crates/
 │   └── vibe-generate/       # Rust CLI behind the vibe-generate plugin
