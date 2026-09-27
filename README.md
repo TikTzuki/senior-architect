@@ -27,18 +27,19 @@ Add the marketplace once, then install whichever plugins you want:
 /plugin install vibe-generate@senior-architect
 ```
 
-Each plugin is independent — install one, install all six, uninstall any of them without touching the rest.
+Each plugin is independent — install one, install all seven, uninstall any of them without touching the rest.
 
 ## Plugins
 
-| Plugin                    | What it does                                                                                           | Requires            |
-|---------------------------|--------------------------------------------------------------------------------------------------------|---------------------|
-| **`vibe-generate`**       | Scaffold production-ready projects from curated templates (Next.js 16, Rust 2024, Spring Boot 4.0)     | `vibe-generate` CLI |
-| **`tmux`**                | Drive interactive CLIs by sending keystrokes to tmux panes and scraping their output                   | `tmux`              |
-| **`gog`**                 | Gmail, Calendar, Drive, Contacts, Sheets, and Docs from the terminal                                   | `gog`               |
-| **`docflu`**              | Sync Docusaurus markdown to Confluence, Google Docs, or Notion — diagrams included                     | `docflu`, `node`    |
-| **`skill-creator`**       | Create, structure, validate, and package Agent Skills                                                  | —                   |
-| **`production-patterns`** | Review code against production failure modes that only appear under concurrency, retries, and timeouts | —                   |
+| Plugin                    | What it does                                                                                                    | Requires                 |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------|--------------------------|
+| **`vibe-generate`**       | Scaffold production-ready projects from curated templates (Next.js 16, Rust 2024, Spring Boot 4.0)              | `vibe-generate` CLI      |
+| **`tmux`**                | Drive interactive CLIs by sending keystrokes to tmux panes and scraping their output                            | `tmux`                   |
+| **`gog`**                 | Gmail, Calendar, Drive, Contacts, Sheets, and Docs from the terminal                                            | `gog`                    |
+| **`docflu`**              | Sync Docusaurus markdown to Confluence, Google Docs, or Notion — diagrams included                              | `docflu`, `node`         |
+| **`skill-creator`**       | Create, structure, validate, and package Agent Skills                                                           | —                        |
+| **`production-patterns`** | Review code against production failure modes that only appear under concurrency, retries, and timeouts          | —                        |
+| **`hrm`**                 | Upload candidate CVs to New Era HRM and fetch AI CV reviews + JD match — [install guide](plugins/hrm/README.md) | `python3`, HRM API token |
 
 Install any of them the same way:
 
@@ -46,6 +47,7 @@ Install any of them the same way:
 /plugin install tmux@senior-architect
 /plugin install gog@senior-architect
 /plugin install docflu@senior-architect
+/plugin install hrm@senior-architect
 ```
 
 ## vibe-generate

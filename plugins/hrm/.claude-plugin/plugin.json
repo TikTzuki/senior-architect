@@ -1,0 +1,19 @@
+{
+  "name": "hrm",
+  "version": "1.0.0",
+  "description": "New Era HRM for agents: upload candidate CVs to a position and fetch AI CV reviews and JD match results, with a personal API token",
+  "author": {
+    "name": "tiktuzki",
+    "url": "https://www.tiktuzki.com"
+  },
+  "homepage": "https://github.com/TikTzuki/senior-architect/tree/main/plugins/hrm",
+  "repository": "https://github.com/TikTzuki/senior-architect",
+  "license": "Apache-2.0",
+  "keywords": [
+    "hrm",
+    "recruiting",
+    "candidates",
+    "cv",
+    "review"
+  ]
+}
