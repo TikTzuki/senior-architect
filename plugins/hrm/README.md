@@ -50,8 +50,12 @@ For a single project only, copy it to `<project>/.claude/skills/hrm` instead.
     - **Chỉ đọc / Read only**: search candidates and read reviews. Start with this.
     - **Đọc và ghi / Read and write**: also upload CVs and run reviews / matching.
 3. Pick an expiry (30–365 days) → **Tạo token / Create token**.
-4. Copy the two `export` lines shown. **The token is shown only once.** If you lose it, revoke
-   it and create a new one.
+4. Step 3 of the **Connect Claude Code** panel now shows a ready-made command. Click **Copy**, paste
+   it into Terminal, done: it removes any old `HRM_*` lines from `~/.zshrc` (switch to `bash` for
+   `~/.bashrc`), writes the new token, and reloads the file. **The token is shown only once.** If
+   you lose it, revoke it and create a new one.
+
+   That covers step 3 below. Read on only if you'd rather set it up by hand.
 
 ## 3. Give the token to Claude Code
 
