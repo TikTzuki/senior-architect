@@ -95,6 +95,12 @@ def read_mhtml(path):
 def read_md(path):
     raw = path.read_bytes()
     text = raw.decode("utf-8", "replace")
+    # Converted posts (scripts/dev-insider-to-md.py) carry JSON-valued front matter.
+    front = re.match(r"---\n(.*?)\n---\n", text, re.S)
+    if front:
+        meta = {k: json.loads(v) for k, v in re.findall(r"^(\w+): (.*)$", front.group(1), re.M)}
+        return {"title": meta.get("title") or path.stem, "url": meta.get("url") or "",
+                "post_id": meta.get("post_id"), "saved": meta.get("saved"), "raw": raw}
     title = next((l[2:].strip() for l in text.splitlines() if l.startswith("# ")), path.stem)
     ids = Counter(POST_ID_IN_MD.findall(text))
     post_id = ids.most_common(1)[0][0] if ids else None
