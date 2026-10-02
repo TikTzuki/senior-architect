@@ -38,7 +38,7 @@ Each plugin is independent — install one, install all seven, uninstall any of 
 | **`gog`**                 | Gmail, Calendar, Drive, Contacts, Sheets, and Docs from the terminal                                            | `gog`                    |
 | **`docflu`**              | Sync Docusaurus markdown to Confluence, Google Docs, or Notion — diagrams included                              | `docflu`, `node`         |
 | **`skill-creator`**       | Create, structure, validate, and package Agent Skills                                                           | —                        |
-| **`production-patterns`** | Review code against production failure modes that only appear under concurrency, retries, and timeouts          | —                        |
+| **`production-patterns`** | Review code against production failure modes, and design systems from requirements (system-design primer)       | —                        |
 | **`hrm`**                 | Upload candidate CVs to New Era HRM and fetch AI CV reviews + JD match — [install guide](plugins/hrm/README.md) | `python3`, HRM API token |
 
 Install any of them the same way:
@@ -200,6 +200,12 @@ Source material for those lessons lives in `dev-insider-docs/`, which is **gitig
 purpose** — it is paid subscriber content and is not redistributable. The lessons are original
 writing derived from it; the sources are not published, mirrored, or committed.
 
+The `system-design` skill is the forward direction: requirements → design. Its references
+compress [donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer)
+(CC BY 4.0) — method, estimation numbers, building-block trade-offs, eight case studies — and
+link into the 41 lessons for each block's failure modes. They are plugin-local and not in
+`knowledge-map.yaml`; they are not failure-mode lessons and do not meet `lesson-add`'s bar.
+
 ## Repository Structure
 
 ```
@@ -219,6 +225,8 @@ senior-architect/
 │       │   └── references/  # 41 lessons — source of truth, mirrored to the site
 │       ├── skills/deploy-checklist/
 │       │   └── references/  # pre-deploy checklist — plugin-local, NOT mirrored
+│       ├── skills/system-design/
+│       │   └── references/  # compressed system-design-primer — plugin-local, NOT mirrored
 │       └── skills/roadmap/
 ├── crates/
 │   └── vibe-generate/       # Rust CLI behind the vibe-generate plugin

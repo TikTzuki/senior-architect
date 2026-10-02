@@ -93,7 +93,7 @@
     {
       "name": "production-patterns",
       "source": "./plugins/production-patterns",
-      "description": "Review code against a growing library of production system-design lessons \u2014 the failure modes that only appear under concurrency, retries, and timeouts",
+      "description": "Review code against a growing library of production system-design lessons \u2014 the failure modes that only appear under concurrency, retries, and timeouts \u2014 and design systems from requirements with a compressed system-design primer",
       "version": "1.0.0",
       "category": "review",
       "keywords": [
@@ -101,7 +101,8 @@
         "system-design",
         "production",
         "architecture",
-        "scalability"
+        "scalability",
+        "design"
       ],
       "author": {
         "name": "tiktuzki"
