@@ -54,7 +54,7 @@ mechanisms underneath them.
 
 | # | Series                        | Lesson coverage here |
 |---|-------------------------------|----------------------|
-| 5 | API Design Patterns           | none                 |
+| 5 | API Design Patterns           | api-contracts, api-resource-modeling |
 | 6 | Distributed Systems Explained | none                 |
 | 7 | Replication & Scaling         | none                 |
 | 8 | Event Sourcing & CQRS         | none                 |

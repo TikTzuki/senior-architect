@@ -60,6 +60,11 @@ lessons:
     group: runtime
     tags: [ runtime, tier-1-foundations ]
     sidebar_position: 7
+  container-identity-and-secrets.md:
+    title: "Container Identity & Secrets"
+    group: runtime
+    tags: [ runtime, kubernetes, tier-1-foundations ]
+    sidebar_position: 8
   storage-engines.md:
     title: Storage Engines
     group: storage

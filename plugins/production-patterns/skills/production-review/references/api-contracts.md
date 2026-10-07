@@ -15,6 +15,7 @@ Part of the API set: **contracts & versioning** (this file) ·
 - [The contract is the product](#the-contract-is-the-product)
 - [Contract-first](#contract-first)
 - [What counts as breaking](#what-counts-as-breaking)
+- [Three breakages that pass every schema check](#three-breakages-that-pass-every-schema-check)
 - [Versioning](#versioning)
 - [Deprecation is a process](#deprecation-is-a-process)
 - [Governance, when good engineers are not enough](#governance-when-good-engineers-are-not-enough)
@@ -116,6 +117,44 @@ of the contract**, not just structure. A consumer that relies on default orderin
 [list endpoints](api-list-endpoints.md) — breaks when you "improve" it, and no schema diff will
 catch that.
 
+## Three breakages that pass every schema check
+
+Each of these ships green: the schema diff is additive or the type is "the same number", CI is
+quiet, and the consumer breaks anyway.
+
+**The open-ended enum.** Adding an enum value sits in the safe list above with a caveat, and the
+caveat is the entire failure. A consumer that matches exhaustively over the values it knows, with
+no default branch, throws the first time it sees a new one. Statically-typed clients are the usual
+casualties — a generated Swift or Kotlin decoder rejects an unknown case at *parse* time, so the
+crash lands before any business logic that might have coped. Numeric enums make it worse: `3`
+carries no hint of its meaning, so even a client that wanted to degrade gracefully has nothing to
+degrade to. Use string values, define the fallback (`"UNKNOWN"`) in the contract on day one, and
+treat "consumers tolerate unknown values" as something you verified in their code rather than
+assumed in yours.
+
+**An integer that fits everywhere except the browser.** Widening an ID from string to 64-bit
+integer is a storage-layer win that does not survive JSON. JSON has no integer type — only
+`number`, which every browser parses as an IEEE-754 double with a 53-bit mantissa:
+
+```
+server sends    9007199254740993      int64, exact
+JSON number     9.007199254740992e15  double, 53-bit mantissa — low bit gone
+browser reads   9007199254740992      a different ID, no error raised
+```
+
+Above 2^53−1 (`9007199254740991`) precision is silently lost. Nothing throws; the value is simply
+wrong, and it is wrong in a field used for lookups, so the damage is a mis-targeted write rather
+than a failed one. Native mobile clients with real int64 see nothing amiss, which is why this
+reaches production having "worked in testing". Serialize large IDs, money, and counters as
+strings, and never change the JSON type of a published field.
+
+**Auto-increment keys leak the business.** A sequential surrogate key exposed as the public
+identifier tells anyone who can create two accounts a day apart exactly how many you created in
+between — order counts, user growth, inventory turnover, all readable by subtraction. It also
+makes enumeration trivial, which turns any weak authorization check into a bulk extraction. This
+is not a schema problem and no contract test catches it. Expose an opaque identifier (UUIDv7,
+hashid) and keep the sequential key where it belongs, inside the database.
+
 ## Versioning
 
 Versioning is not "add `/v2`". It is choosing who absorbs the cost of change.
@@ -180,11 +219,17 @@ circumvented instead of amended.
 - [ ] Deprecation announces a date and signals in-band (`Deprecation` / `Sunset`)
 - [ ] Cross-team conventions exist for errors, pagination, dates, money, and auth
 - [ ] Conventions are enforced by tooling, not by reviewer memory
+- [ ] Enum values are strings, and the contract defines the fallback unknown value
+- [ ] Consumer tolerance of unknown enum values is verified, not assumed
+- [ ] No integer field can exceed 2^53−1; large IDs, money, and counters serialize as strings
+- [ ] Public identifiers are opaque; sequential database keys are never exposed
 
 ---
 
 *Synthesized from TechCraft's API Design Patterns series, parts P1–P2 and P13–P15
 ([collection](https://www.patreon.com/techcraft_official)). The "API is a promise, not an endpoint"
 framing, the contract-first argument against database-driven design, and "good people do not save you
-at 10,000 endpoints" are TechCraft's; the breaking-change taxonomy, deprecation sequence, and
-checklist are this repository's.*
+at 10,000 endpoints" are TechCraft's, as are the three war stories behind "Three breakages that
+pass every schema check" — the open-ended enum, the 53-bit precision loss, and the leaked
+auto-increment key. The breaking-change taxonomy, deprecation sequence, the mechanism and
+remediation written for each of those three, and the checklist are this repository's.*

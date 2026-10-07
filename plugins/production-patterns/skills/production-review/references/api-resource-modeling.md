@@ -15,6 +15,7 @@ Part of the API set: [contracts & versioning](api-contracts.md) ·
 - [Ask what the resource is](#ask-what-the-resource-is)
 - [Lifecycle, not actions](#lifecycle-not-actions)
 - [When a verb is the right answer](#when-a-verb-is-the-right-answer)
+- [One endpoint is one permission](#one-endpoint-is-one-permission)
 - [Tables are not resources](#tables-are-not-resources)
 - [State transitions as sub-resources](#state-transitions-as-sub-resources)
 - [Review checklist](#review-checklist)
@@ -100,6 +101,48 @@ clear effect?"** `POST /orders/{id}/cancellation` and `POST /orders/{id}/cancel`
 `POST /cancelOrderAndRefundAndNotify` is not — not because of grammar, but because it bundles three
 effects that will need to vary independently.
 
+## One endpoint is one permission
+
+The bundling argument above is about code that has to change together. There is a sharper version
+of it that is a security property, and it is the reason a `type` field is not a neutral choice:
+
+```
+POST /wallets/transactions   { "type": "DEPOSIT",  "amount": 500000 }
+POST /wallets/transactions   { "type": "WITHDRAW", "amount": 500000 }
+```
+
+Same method, same path. **Every layer that makes decisions on method and path now sees one
+operation**: the gateway, the RBAC policy, the WAF rule, the rate limit, the audit log. Grant a
+support agent the ability to credit a customer and you have granted the ability to drain one —
+the only thing between the two is an `if` inside the handler, maintained by whoever last added a
+`type` value.
+
+Development hides this completely. One route is less code, one test, one place to look, and the
+permission model is usually a single `@requires_auth` that looks entirely correct. The gap only
+opens when the second `type` arrives, which is typically after the authorization design is
+finished and nobody revisits it.
+
+What it costs in production:
+
+- **Escalation by editing a field.** The authorization boundary is a string in a request body,
+  checked by application code rather than by the policy layer that was audited.
+- **Policy tooling goes blind.** You cannot write "this role may deposit but not withdraw" in any
+  gateway, service mesh, or IAM policy, because they match on paths. The rule has to be
+  reimplemented inside the handler, where no one reviews it as authorization.
+- **The audit log cannot answer "who withdrew".** Access logs record `POST /wallets/transactions`.
+  Reconstructing intent means parsing archived request bodies, assuming you stored them — and
+  bodies are exactly what gets redacted.
+- **Rate limits cannot be per-operation.** A cheap, high-frequency operation and a dangerous,
+  rare one share one budget.
+- **Validation drifts across branches.** One request schema serves every type, so a field that is
+  required for one is optional-and-ignored for another, and a rule written for the first silently
+  applies to the second.
+
+Split the path, even when one handler serves all of them: `POST /wallets/deposits`,
+`/wallets/withdrawals`, `/wallets/transfers`. Shared implementation is fine; a shared *path* is
+not. The test is not "is this one piece of code" but **"should these be grantable, auditable, and
+rate-limitable separately?"** If yes, they are separate resources no matter how similar the code.
+
 ## Tables are not resources
 
 Storage and contract answer different questions, and the mapping between them should be deliberate:
@@ -149,6 +192,9 @@ about why.
 - [ ] The resource's states and legal transitions are defined
 - [ ] New requirements add fields or transitions, not new verb endpoints
 - [ ] No endpoint bundles multiple independent effects
+- [ ] No endpoint selects its operation from a `type` or `action` field in the body
+- [ ] Operations that should be granted separately have separate paths
+- [ ] Audit log and rate limit can tell operations apart without parsing a request body
 - [ ] Verb-shaped endpoints exist only where genuinely warranted, and are predictable
 - [ ] No internal field (`is_deleted`, `version`, partition or outbox state) appears in responses
 - [ ] Clients cannot set status directly to drive the state machine
@@ -159,5 +205,7 @@ about why.
 
 *Synthesized from TechCraft's API Design Patterns series, part P3
 ([collection](https://www.patreon.com/techcraft_official)). The "API manages resource lifecycles, not
-actions" framing and the "what actually is an Order?" question are TechCraft's; the verb-exception
-analysis, transition-as-sub-resource treatment, and checklist are this repository's.*
+actions" framing, the "what actually is an Order?" question, and the type-dispatched wallet
+endpoint behind "One endpoint is one permission" are TechCraft's; the verb-exception analysis,
+transition-as-sub-resource treatment, the authorization/audit/rate-limit consequences worked out
+for that endpoint, and the checklist are this repository's.*

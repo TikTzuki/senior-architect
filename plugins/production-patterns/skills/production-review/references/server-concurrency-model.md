@@ -6,7 +6,8 @@ that wait decides whether adding threads helps or makes it worse.
 Part of the backend set: **concurrency model** (this file) · [memory & GC](memory-and-gc.md) ·
 [caching](caching.md) · [distributed locks](distributed-locks.md) ·
 [health checks & load balancing](health-checks-and-load-balancing.md) ·
-[deployment & config](deployment-and-config.md)
+[deployment & config](deployment-and-config.md) ·
+[container identity & secrets](container-identity-and-secrets.md)
 
 ## Contents
 

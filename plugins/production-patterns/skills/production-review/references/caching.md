@@ -7,7 +7,8 @@ Part of the backend set: [concurrency model](server-concurrency-model.md) ·
 [memory & GC](memory-and-gc.md) · **caching** (this file) ·
 [distributed locks](distributed-locks.md) ·
 [health checks & load balancing](health-checks-and-load-balancing.md) ·
-[deployment & config](deployment-and-config.md)
+[deployment & config](deployment-and-config.md) ·
+[container identity & secrets](container-identity-and-secrets.md)
 
 ## Contents
 
