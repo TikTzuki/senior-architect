@@ -1,0 +1,42 @@
+name: Rebuild www.tiktuzki.com
+
+# The site (TikTzuki/TikTzuki, release_docs.yml) publishes docs from this repo, but a merge
+# here does not trigger its build. This sends it `repository_dispatch: knowledge-updated`
+# so the site updates within minutes instead of at the nightly run.
+#
+# Auth is the GitHub App `tiktuzki-site-dispatch` (App ID in the SITE_DISPATCH_APP_ID variable,
+# private key in the SITE_DISPATCH_APP_KEY secret; the key is in Proton Pass, Personal vault).
+# It is installed on TikTzuki/TikTzuki only, and each run mints a token that expires within the
+# hour. Unlike a PAT, nothing here expires silently.
+on:
+  push:
+    branches: [ main ]
+    paths:
+      # Only what the site publishes: the lessons, and the manifest that titles and tags them.
+      - 'plugins/production-patterns/skills/production-review/references/**'
+      - 'knowledge-map.yaml'
+  workflow_dispatch:
+
+permissions: {}   # this job needs nothing from this repo; the App token does the work
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - id: app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.SITE_DISPATCH_APP_ID }}
+          private-key: ${{ secrets.SITE_DISPATCH_APP_KEY }}
+          owner: TikTzuki
+          repositories: TikTzuki
+          permission-contents: write   # what the dispatch API requires; nothing more
+
+      - name: Ask the site to rebuild
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          gh api repos/TikTzuki/TikTzuki/dispatches \
+            -f event_type=knowledge-updated \
+            -f "client_payload[source]=${{ github.repository }}@${{ github.sha }}"
+          echo "Dispatched. Follow it at https://github.com/TikTzuki/TikTzuki/actions/workflows/release_docs.yml"
