@@ -142,12 +142,13 @@ and repairs it:
 data is wrong when no infrastructure error occurred?* Monitor **invariants**, not CPU:
 
 ```sql
--- Money received but never booked to the ledger. Any row here is an incident.
-SELECT count(*)
+-- Confirmed payments with no ledger entry after a grace window. Any row is an incident;
+-- the window keeps payments whose ledger write is still in flight out of the result.
+SELECT p.id, p.amount, p.confirmed_at
 FROM payments p
-         LEFT JOIN ledger l ON l.payment_id = p.id
 WHERE p.status = 'SUCCESS'
-  AND l.id IS NULL;
+  AND p.confirmed_at < now() - interval '5 minutes'
+  AND NOT EXISTS (SELECT 1 FROM ledger_entries e WHERE e.payment_id = p.id);
 ```
 
 **2. Reconciliation** — periodically compare independent sources. In finance, a three-way match:
