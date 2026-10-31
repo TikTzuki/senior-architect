@@ -6,6 +6,7 @@ so choose it for a reason.
 
 Part of the data-modeling set: [retention & history](data-retention-and-history.md) ·
 [temporal data](temporal-data.md) · **event sourcing & CQRS** (this file) ·
+[event replay & rebuild](event-replay-and-projection-rebuild.md) ·
 [message delivery](message-delivery-semantics.md)
 
 ## Contents
@@ -197,7 +198,8 @@ state is *derived from money or legally significant movements* — ledgers, wall
 - [ ] CQRS read models are recognized as eventually consistent, with read-your-writes handled
 - [ ] Every materialized view has an explicit refresh strategy and a stated maximum staleness
 - [ ] Materialized view refresh does not lock out readers
-- [ ] Projection rebuild has been exercised, not just assumed to work
+- [ ] Projection rebuild has been exercised, not just assumed to work — see
+      [event replay & rebuild](event-replay-and-projection-rebuild.md)
 
 ---
 

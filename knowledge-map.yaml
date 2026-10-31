@@ -145,11 +145,16 @@ lessons:
     group: data-modeling
     tags: [ data-modeling, tier-2-distributed ]
     sidebar_position: 3
+  event-replay-and-projection-rebuild.md:
+    title: "Event Replay & Projection Rebuild"
+    group: data-modeling
+    tags: [ data-modeling, tier-2-distributed ]
+    sidebar_position: 4
   message-delivery-semantics.md:
     title: Message Delivery Semantics
     group: data-modeling
     tags: [ data-modeling, tier-1-foundations, messaging ]
-    sidebar_position: 4
+    sidebar_position: 5
   api-contracts.md:
     title: "API Contracts & Versioning"
     group: api-design

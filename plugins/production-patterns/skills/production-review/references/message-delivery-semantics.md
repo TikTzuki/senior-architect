@@ -5,6 +5,7 @@ happen once.** Outbox stops events being lost; Inbox stops duplicates being appl
 
 Part of the data-modeling set: [retention & history](data-retention-and-history.md) ·
 [temporal data](temporal-data.md) · [event sourcing & CQRS](event-sourcing-and-cqrs.md) ·
+[event replay & rebuild](event-replay-and-projection-rebuild.md) ·
 **message delivery** (this file)
 
 ## Contents
