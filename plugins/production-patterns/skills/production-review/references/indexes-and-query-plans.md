@@ -4,7 +4,7 @@
 because the table is small, not because the plan is good.
 
 Part of the storage set: [storage engines](storage-engines.md) ·
-**indexes & query plans** (this file) · [replication & sharding](replication-and-sharding.md) ·
+**indexes & query plans** (this file) · [replication & sharding](replication-and-sharding.md) · [replica placement & quorums](replica-placement-and-quorums.md) ·
 [session consistency](session-consistency.md) · [connection pools & latency](connection-pools-and-latency.md)
 
 ## Contents

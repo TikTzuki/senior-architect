@@ -5,7 +5,7 @@ Reading from a replica means accepting stale data; choosing a shard key wrong me
 data layer.
 
 Part of the storage set: [storage engines](storage-engines.md) ·
-[indexes & query plans](indexes-and-query-plans.md) · **replication & sharding** (this file) ·
+[indexes & query plans](indexes-and-query-plans.md) · **replication & sharding** (this file) · [replica placement & quorums](replica-placement-and-quorums.md) ·
 [session consistency](session-consistency.md) · [connection pools & latency](connection-pools-and-latency.md)
 
 ## Contents

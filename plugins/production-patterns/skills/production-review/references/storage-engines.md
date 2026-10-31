@@ -4,7 +4,7 @@
 is really "too many pages fetched from disk," and your key choice decides how many.
 
 Part of the storage set: **storage engines** (this file) ·
-[indexes & query plans](indexes-and-query-plans.md) · [replication & sharding](replication-and-sharding.md) ·
+[indexes & query plans](indexes-and-query-plans.md) · [replication & sharding](replication-and-sharding.md) · [replica placement & quorums](replica-placement-and-quorums.md) ·
 [session consistency](session-consistency.md) · [connection pools & latency](connection-pools-and-latency.md)
 
 ## Contents

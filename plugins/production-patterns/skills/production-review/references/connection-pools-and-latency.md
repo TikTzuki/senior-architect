@@ -4,7 +4,7 @@
 API.** Latency is the whole pipeline, and round trips dominate it.
 
 Part of the storage set: [storage engines](storage-engines.md) ·
-[indexes & query plans](indexes-and-query-plans.md) · [replication & sharding](replication-and-sharding.md) ·
+[indexes & query plans](indexes-and-query-plans.md) · [replication & sharding](replication-and-sharding.md) · [replica placement & quorums](replica-placement-and-quorums.md) ·
 [session consistency](session-consistency.md) · **connection pools & latency** (this file)
 
 ## Contents

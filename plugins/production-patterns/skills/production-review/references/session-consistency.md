@@ -6,7 +6,7 @@ commits to none of them.
 
 Part of the storage set: [storage engines](storage-engines.md) ·
 [indexes & query plans](indexes-and-query-plans.md) ·
-[replication & sharding](replication-and-sharding.md) · **session consistency** (this file) ·
+[replication & sharding](replication-and-sharding.md) · [replica placement & quorums](replica-placement-and-quorums.md) · **session consistency** (this file) ·
 [connection pools & latency](connection-pools-and-latency.md)
 
 ## Contents

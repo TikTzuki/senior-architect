@@ -100,6 +100,11 @@ lessons:
     group: storage
     tags: [ storage, tier-3-production-data ]
     sidebar_position: 7
+  replica-placement-and-quorums.md:
+    title: "Replica Placement & Quorums"
+    group: storage
+    tags: [ storage, distributed-systems, tier-2-distributed ]
+    sidebar_position: 8
   transaction-isolation.md:
     title: Transaction Isolation
     group: transactions
