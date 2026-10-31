@@ -20,6 +20,7 @@ Part of the data-modeling set: [retention & history](data-retention-and-history.
 - [Snapshots](#snapshots)
 - [CQRS](#cqrs)
 - [Materialized views are not caches](#materialized-views-are-not-caches)
+- [Migrating from CRUD](#migrating-from-crud)
 - [When not to do this](#when-not-to-do-this)
 - [Review checklist](#review-checklist)
 
@@ -149,6 +150,23 @@ Two clarifications that prevent most CQRS mistakes:
   their own change — see [consistency-boundaries](consistency-boundaries.md). Design for it: read
   the write model for read-your-writes paths, or make the UI reflect the submitted command
   optimistically. Do not pretend the lag is zero.
+- **Commands decide against the write model, never a read model.** A balance check that reads the
+  projection approves a second withdrawal while the first is still in flight, because the read
+  model has not caught up. Validation that guards money or stock loads the aggregate (or locks the
+  row); the projection is for showing, not for deciding.
+
+### One read model per question, and what it costs
+
+Shaping a read model per use case keeps each one simple, and has two costs that only appear at
+production cardinality:
+
+- **Update amplification.** One event can touch many read-model rows — a price or NAV change updates
+  every holder's portfolio summary. Live lag is fine until that event fires against tens of
+  thousands of rows. Measure the fan-out of each event type and the time to converge after the
+  widest one, against the view's freshness target.
+- **Drift between copies.** Denormalizing a customer's name into three views is deliberate, but each
+  copy needs a named owner, the event that updates it, and a periodic check against the source.
+  One projector that misses a correction leaves the copies disagreeing indefinitely.
 
 ## Materialized views are not caches
 
@@ -171,6 +189,32 @@ Then it silently serves stale data with no TTL to blame and no miss path to reco
 materialized view needs an explicit answer to: *what refreshes this, how often, and what is the
 maximum staleness anyone can observe?* Concurrent refresh (`REFRESH MATERIALIZED VIEW CONCURRENTLY`)
 matters too, or the refresh locks out the readers it exists to serve.
+
+## Migrating from CRUD
+
+A CRUD table holds where each entity ended up, not how it got there. A row in `REFUNDED` may have
+been one full refund or three partial ones after a failed capture. Converting it into a tidy sequence
+of events inferred from the final status **invents history**: the audit trail now shows a clean path
+that never happened, and the retries, cancellations and releases a dispute needs are gone.
+
+Start each migrated stream with **one opening event** — `PaymentStateImported{legacy_version, …}` —
+that states what the legacy snapshot knew at the cut-over moment. Queries before that point answer
+"snapshot only". Then move authority, not rows, in stages:
+
+1. **Baseline the legacy data** — counts, totals per status and currency, known duplicates and
+   orphans — so its existing defects are not later blamed on the new path.
+2. **Emit facts while legacy stays authoritative**, through an [outbox](message-delivery-semantics.md#outbox-do-not-lose-the-event).
+3. **Build shadow projections nobody reads**, and classify every difference as legacy bug, new bug,
+   semantic difference or unknown. Unknown goes to zero before going further.
+4. **Shadow the commands**: run the new aggregate beside the old logic and compare its decisions —
+   with no side effects from the shadow path.
+5. **Cut over per entity or tenant** through a control marker that the router reads. After it, the
+   legacy table becomes a projection fed from the stream.
+
+Never write both stores in the same request without an atomic boundary: one succeeds, the other
+times out, and the next read trusts whichever is stale. Exactly one store is authoritative for each
+entity at any moment, and a **writes-to-legacy-after-cutover** metric proves nothing still writes
+the old one.
 
 ## When not to do this
 
@@ -199,6 +243,11 @@ state is *derived from money or legally significant movements* — ledgers, wall
 - [ ] Snapshots exist before production history accumulates, triggered by event count
 - [ ] Snapshots are rebuildable and never the sole source of a value
 - [ ] CQRS read models are recognized as eventually consistent, with read-your-writes handled
+- [ ] Commands that guard money or stock validate against the write model, never a projection
+- [ ] Each event type's read-model fan-out is known, and convergence after the widest one is tested
+- [ ] Denormalized copies have an owner, an updating event and a drift check
+- [ ] Migrated streams start with an explicit opening event; no history is inferred from final state
+- [ ] Migration has one authoritative store per entity, shadowed commands, and a writes-after-cutover metric
 - [ ] Every materialized view has an explicit refresh strategy and a stated maximum staleness
 - [ ] Materialized view refresh does not lock out readers
 - [ ] Projection rebuild has been exercised, not just assumed to work — see
@@ -210,4 +259,7 @@ state is *derived from money or legally significant movements* — ledgers, wall
 Distributed Systems part P9
 ([collection](https://www.patreon.com/techcraft_official)). The event-sourcing "hidden debt" framing,
 snapshots-as-mandatory argument, and the materialized-view-as-cost-shift distinction are TechCraft's;
-the review structure and checklist are this repository's.*
+the review structure and checklist are this repository's. The command-versus-projection check,
+update amplification and drift, and the CRUD migration section (opening event, shadow and command
+shadowing, per-entity authority cut-over, writes-after-cutover metric) come from TechCraft's Event
+Sourcing & CQRS parts P4, P11, P27 and P28.*
