@@ -82,6 +82,8 @@ nothing, and every added file dilutes the ones that work.
 
 ## Honesty about coverage
 
-Five lessons currently touch this roadmap, all partial, all in Tiers 1 and 3. Tiers 2, 4, and 5
-have none. When reporting progress, say that plainly rather than letting a coverage table imply
-a tier is handled. One lesson is one failure mode — not a series.
+Nine series are swept — all of Tiers 1 and 2, and Payment System in Tier 4 — and the reference
+lists the lessons each one feeds. Tier 3 has only topically related lessons, the other ten Tier 4
+series have none, and Tier 5 has none. When reporting progress, say that plainly rather than
+letting a coverage table imply a tier is handled: a swept series means its reviewable failure
+modes are captured, not that its judgment and trade-off material is.

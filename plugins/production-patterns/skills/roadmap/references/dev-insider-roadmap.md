@@ -31,12 +31,12 @@ Then go to Tier 1 and proceed in order.
 
 > The tier most developers skip, and the reason many stay mid-level for years.
 
-| # | Series                    | Lesson coverage here                                                                                                                                                         |
-|---|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1 | Backend Internals         | partial — [large-file-upload](../../production-review/references/large-file-upload.md)                                                                                       |
-| 2 | Database Internals        | partial — [indexes-and-query-plans](../../production-review/references/indexes-and-query-plans.md), [lock-contention](../../production-review/references/lock-contention.md) |
-| 3 | Data Modeling Patterns    | none                                                                                                                                                                         |
-| 4 | Transaction & Consistency | partial — [transaction-isolation](../../production-review/references/transaction-isolation.md)                                                                               |
+| # | Series | Lesson coverage here |
+|---|---|---|
+| 1 | Backend Internals | swept, 8 lessons — [caching](../../production-review/references/caching.md), [connection-pools-and-latency](../../production-review/references/connection-pools-and-latency.md), [deployment-and-config](../../production-review/references/deployment-and-config.md), [distributed-locks](../../production-review/references/distributed-locks.md), [health-checks-and-load-balancing](../../production-review/references/health-checks-and-load-balancing.md), [memory-and-gc](../../production-review/references/memory-and-gc.md), [message-delivery-semantics](../../production-review/references/message-delivery-semantics.md), [server-concurrency-model](../../production-review/references/server-concurrency-model.md) |
+| 2 | Database Internals | swept, 7 lessons — [connection-pools-and-latency](../../production-review/references/connection-pools-and-latency.md), [indexes-and-query-plans](../../production-review/references/indexes-and-query-plans.md), [lock-contention](../../production-review/references/lock-contention.md), [replication-and-sharding](../../production-review/references/replication-and-sharding.md), [schema-migrations](../../production-review/references/schema-migrations.md), [storage-engines](../../production-review/references/storage-engines.md), [transaction-atomicity-and-durability](../../production-review/references/transaction-atomicity-and-durability.md) |
+| 3 | Data Modeling Patterns | swept, 9 lessons — [data-retention-and-history](../../production-review/references/data-retention-and-history.md), [distributed-transactions](../../production-review/references/distributed-transactions.md), [event-sourcing-and-cqrs](../../production-review/references/event-sourcing-and-cqrs.md), [message-delivery-semantics](../../production-review/references/message-delivery-semantics.md), [payment-ledger](../../production-review/references/payment-ledger.md), [payment-reconciliation](../../production-review/references/payment-reconciliation.md), [payment-settlement](../../production-review/references/payment-settlement.md), [payment-state-and-idempotency](../../production-review/references/payment-state-and-idempotency.md), [temporal-data](../../production-review/references/temporal-data.md) |
+| 4 | Transaction & Consistency | swept, 5 lessons — [consistency-boundaries](../../production-review/references/consistency-boundaries.md), [distributed-transactions](../../production-review/references/distributed-transactions.md), [optimistic-vs-pessimistic-locking](../../production-review/references/optimistic-vs-pessimistic-locking.md), [transaction-atomicity-and-durability](../../production-review/references/transaction-atomicity-and-durability.md), [transaction-isolation](../../production-review/references/transaction-isolation.md) |
 
 **What you should end up understanding:** how a request actually traverses the system; how
 threads, cache, queues, and connection pools govern performance and stability; how a database
@@ -52,12 +52,12 @@ mechanisms underneath them.
 
 > The transition from implementer to someone who understands the system.
 
-| # | Series                        | Lesson coverage here |
-|---|-------------------------------|----------------------|
-| 5 | API Design Patterns           | api-contracts, api-resource-modeling |
-| 6 | Distributed Systems Explained | none                 |
-| 7 | Replication & Scaling         | none                 |
-| 8 | Event Sourcing & CQRS         | none                 |
+| # | Series | Lesson coverage here |
+|---|---|---|
+| 5 | API Design Patterns | swept, 8 lessons — [api-async-operations](../../production-review/references/api-async-operations.md), [api-contracts](../../production-review/references/api-contracts.md), [api-list-endpoints](../../production-review/references/api-list-endpoints.md), [api-resource-modeling](../../production-review/references/api-resource-modeling.md), [payment-state-and-idempotency](../../production-review/references/payment-state-and-idempotency.md), [rate-limiting](../../production-review/references/rate-limiting.md), [timeouts-and-retries](../../production-review/references/timeouts-and-retries.md), [webhook-provider-design](../../production-review/references/webhook-provider-design.md) |
+| 6 | Distributed Systems Explained | swept, 10 lessons — [circuit-breakers-and-bulkheads](../../production-review/references/circuit-breakers-and-bulkheads.md), [consensus-and-leader-election](../../production-review/references/consensus-and-leader-election.md), [consistency-boundaries](../../production-review/references/consistency-boundaries.md), [designing-for-failure](../../production-review/references/designing-for-failure.md), [distributed-transactions](../../production-review/references/distributed-transactions.md), [event-sourcing-and-cqrs](../../production-review/references/event-sourcing-and-cqrs.md), [message-delivery-semantics](../../production-review/references/message-delivery-semantics.md), [network-and-latency](../../production-review/references/network-and-latency.md), [replication-and-sharding](../../production-review/references/replication-and-sharding.md), [timeouts-and-retries](../../production-review/references/timeouts-and-retries.md) |
+| 7 | Replication & Scaling | swept, 5 lessons — [consensus-and-leader-election](../../production-review/references/consensus-and-leader-election.md), [multi-region-failover](../../production-review/references/multi-region-failover.md), [replica-placement-and-quorums](../../production-review/references/replica-placement-and-quorums.md), [replication-and-sharding](../../production-review/references/replication-and-sharding.md), [session-consistency](../../production-review/references/session-consistency.md) |
+| 8 | Event Sourcing & CQRS | swept, 4 lessons — [data-retention-and-history](../../production-review/references/data-retention-and-history.md), [event-replay-and-projection-rebuild](../../production-review/references/event-replay-and-projection-rebuild.md), [event-schema-evolution](../../production-review/references/event-schema-evolution.md), [event-sourcing-and-cqrs](../../production-review/references/event-sourcing-and-cqrs.md) |
 
 **What you should end up understanding:** an API is a long-term contract, not an endpoint.
 Failure is not an exception — it is the default state of a distributed system. Why retry,
@@ -73,12 +73,12 @@ systems are hard not because of technology, but because you no longer control ev
 > Once a system is large enough, the question stops being whether the code is right and becomes
 > whether the data is still correct.
 
-| #  | Series                     | Lesson coverage here                                                                               |
-|----|----------------------------|----------------------------------------------------------------------------------------------------|
-| 9  | Data Architecture          | none                                                                                               |
-| 10 | Production Data Operation  | partial — [schema-migrations](../../production-review/references/schema-migrations.md)             |
-| 11 | Production Database Design | none                                                                                               |
-| 12 | Database Optimization      | partial — [indexes-and-query-plans](../../production-review/references/indexes-and-query-plans.md) |
+| # | Series | Lesson coverage here |
+|---|---|---|
+| 9 | Data Architecture | none |
+| 10 | Production Data Operation | not swept; topically related — [schema-migrations](../../production-review/references/schema-migrations.md) |
+| 11 | Production Database Design | none |
+| 12 | Database Optimization | not swept; topically related — [indexes-and-query-plans](../../production-review/references/indexes-and-query-plans.md) |
 
 **What you should end up understanding:** data does not stay inside one service's database — it
 flows through analytics, risk, finance, compliance, reporting, and support. Three claims worth
@@ -98,19 +98,19 @@ And optimization is not query tuning; it is identifying the system's real bottle
 > Where the pieces connect. Difficulty rises naturally:
 > `Money → Business Transactions → Distributed Systems → Internet Scale → Architecture Thinking`
 
-| #  | Series                | Lesson coverage here |
-|----|-----------------------|----------------------|
-| 13 | Payment System        | none                 |
-| 14 | Wallet System         | none                 |
-| 15 | Banking System        | none                 |
-| 16 | Order System          | none                 |
-| 17 | Inventory System      | none                 |
-| 18 | Chat System           | none                 |
-| 19 | Notification System   | none                 |
-| 20 | News Feed             | none                 |
-| 21 | Search Engine         | none                 |
-| 22 | Recommendation System | none                 |
-| 23 | Design Mindset        | none                 |
+| # | Series | Lesson coverage here |
+|---|---|---|
+| 13 | Payment System | swept, 7 lessons — [payment-fraud-detection](../../production-review/references/payment-fraud-detection.md), [payment-ledger](../../production-review/references/payment-ledger.md), [payment-order-consistency](../../production-review/references/payment-order-consistency.md), [payment-provider-and-webhooks](../../production-review/references/payment-provider-and-webhooks.md), [payment-reconciliation](../../production-review/references/payment-reconciliation.md), [payment-refunds](../../production-review/references/payment-refunds.md), [payment-state-and-idempotency](../../production-review/references/payment-state-and-idempotency.md) |
+| 14 | Wallet System | none |
+| 15 | Banking System | none |
+| 16 | Order System | none |
+| 17 | Inventory System | none |
+| 18 | Chat System | none |
+| 19 | Notification System | none |
+| 20 | News Feed | none |
+| 21 | Search Engine | none |
+| 22 | Recommendation System | none |
+| 23 | Design Mindset | none |
 
 The roadmap singles out **Payment + Banking + Order + Inventory** as the strongest cluster,
 because those are the systems most backend developers actually meet at work.
@@ -150,17 +150,22 @@ before it happens.
 
 ## Coverage summary
 
-| Tier                         | Series | With some lesson coverage |
-|------------------------------|--------|---------------------------|
-| 1 — Foundations              | 4      | 3                         |
-| 2 — Distributed Thinking     | 4      | 0                         |
-| 3 — Production Data Systems  | 4      | 2                         |
-| 4 — Production System Design | 11     | 0                         |
-| 5 — Technical Leadership     | 8      | 0                         |
-| **Total**                    | **31** | **5 partial**             |
+| Tier                         | Series | Swept | Topically related only |
+|------------------------------|--------|-------|------------------------|
+| 1 — Foundations              | 4      | 4     | 0                      |
+| 2 — Distributed Thinking     | 4      | 4     | 0                      |
+| 3 — Production Data Systems  | 4      | 0     | 2                      |
+| 4 — Production System Design | 11     | 1     | 0                      |
+| 5 — Technical Leadership     | 8      | 0     | 0                      |
+| **Total**                    | **31** | **9** | **2**                  |
 
-"Partial" means a lesson exists touching that series' subject matter. None of these series is
-covered comprehensively — a single lesson is one failure mode, not a curriculum.
+"Swept" means every published part of the series was saved, read in full, and decided against the
+knowledge base — captured as a lesson, used to extend one, or recorded as already covered. The
+lessons listed are where that series' failure modes now live; lessons are shared, so one appears
+under several series. A swept series is not memorised knowledge: the lessons hold only what can be
+checked in a diff, and much of each series — motivation, judgment, trade-off reasoning — is
+deliberately not in them. "Topically related" means a lesson touches the subject, but the series
+itself has not been read.
 
 ## Not every topic becomes a lesson
 
