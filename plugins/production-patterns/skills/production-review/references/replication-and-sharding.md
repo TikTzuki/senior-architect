@@ -170,6 +170,18 @@ Even distribution of *keys* does not give even distribution of *load*. One enter
 a thousand times the volume of everyone else puts a thousand times the traffic on one shard, and
 that shard is now your capacity limit while the rest idle.
 
+The same happens without any large tenant when you **range-shard on a key that only grows** — a
+timestamp, an auto-increment ID, a date. Every new row sorts after every existing one, so every
+insert lands on the newest shard, and the shards holding history serve only occasional reads. Adding
+shards does not help: the new one simply becomes the next shard to take every write. It passes every
+test, because a test dataset is small enough that "the newest shard" is the only shard. Range
+sharding is the right choice when range scans dominate *and* the key is spread across the range;
+for an ever-growing key, hash it, or prefix it with something that spreads the writes (a tenant or
+a bucket number) and accept that a time-range query now touches every shard.
+
+Partitioning by a real-world attribute — country, region, product line — fails the same way more
+slowly: the partitions mirror real markets, and real markets differ in size by orders of magnitude.
+
 Mitigations: composite keys that split large tenants across shards, separate dedicated shards for
 outsized tenants, or a directory-based mapping so individual keys can be relocated. All of them are
 easier to adopt if you assumed a skewed distribution from the start — real-world key distributions
@@ -240,6 +252,7 @@ made it accidentally, and usually inconsistently.
 - [ ] Split-brain fencing exists
 - [ ] Shard key is derived from the dominant query's filter, not from hash uniformity
 - [ ] Skewed key distribution is assumed; hot-shard mitigation exists
+- [ ] No range sharding on an ever-growing key (timestamp, auto-increment) — every write would hit the newest shard
 - [ ] Cross-shard joins, transactions, uniqueness, and pagination each have an answer
 - [ ] Rebalancing strategy avoids `hash % N` requiring a full migration
 - [ ] CP-vs-AP is decided per data class and written down
@@ -249,7 +262,8 @@ made it accidentally, and usually inconsistently.
 ---
 
 *Synthesized from TechCraft's Database Internals parts P11–P12 and P14
-([collection](https://www.patreon.com/collection/2115129)), and Distributed Systems parts P15, P17–P18. The
+([collection](https://www.patreon.com/collection/2115129)), Distributed Systems parts P15, P17–P18, and Replication & Scaling P12
+([collection](https://www.patreon.com/collection/2351128)). The
 replication-lag framing, the
 shard-by-access-pattern rule, the hot-shard trap, and the "CA is theory only" argument are
 TechCraft's; the review structure and checklist are this repository's.*
