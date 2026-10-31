@@ -87,6 +87,8 @@ Properties that make an event store trustworthy:
   rejected; an event already happened.
 - **Append-only, never mutated.** Revoke `UPDATE`/`DELETE` at the database level. A mistake is
   corrected by a new compensating event, exactly as in [payment-ledger](payment-ledger.md).
+  Personal data needs a plan before the first event is written, because it cannot be deleted later —
+  see [erasure when history is append-only](data-retention-and-history.md#erasure-when-history-is-append-only).
 - **Ordered per aggregate**, with a monotonic sequence number. Order across aggregates is usually
   not guaranteed and should not be assumed.
 - **Optimistic concurrency on append** — write expecting version N, fail if another writer got
