@@ -6,6 +6,7 @@ row and destroys the record of what happened to it.
 Part of the data-modeling set: **retention & history** (this file) ·
 [temporal data](temporal-data.md) · [event sourcing & CQRS](event-sourcing-and-cqrs.md) ·
 [event replay & rebuild](event-replay-and-projection-rebuild.md) ·
+[event schema evolution](event-schema-evolution.md) ·
 [message delivery](message-delivery-semantics.md)
 
 ## Contents

@@ -6,6 +6,7 @@ Reconstructing a past decision needs two time axes: when the fact was true, and 
 Part of the data-modeling set: [retention & history](data-retention-and-history.md) ·
 **temporal data** (this file) · [event sourcing & CQRS](event-sourcing-and-cqrs.md) ·
 [event replay & rebuild](event-replay-and-projection-rebuild.md) ·
+[event schema evolution](event-schema-evolution.md) ·
 [message delivery](message-delivery-semantics.md)
 
 ## Contents

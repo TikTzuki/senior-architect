@@ -6,7 +6,8 @@ live copy, verified before cut-over, and sized against the recovery-time objecti
 
 Part of the data-modeling set: [retention & history](data-retention-and-history.md) ·
 [temporal data](temporal-data.md) · [event sourcing & CQRS](event-sourcing-and-cqrs.md) ·
-**event replay & projection rebuild** (this file) · [message delivery](message-delivery-semantics.md)
+**event replay & projection rebuild** (this file) ·
+[event schema evolution](event-schema-evolution.md) · [message delivery](message-delivery-semantics.md)
 
 ## Contents
 
@@ -95,7 +96,8 @@ after it is wrong, and nothing short of a rebuild repairs it. **Halt the partiti
 fetch the missing position**; never advance over a gap. Write the projection change and the
 checkpoint in one transaction, the same rule as the [inbox](message-delivery-semantics.md#inbox-do-not-apply-it-twice).
 
-A **poison event** — one the current code cannot read or apply — needs a policy decided by the
+A **poison event** — one the current code cannot read or apply, often an
+[old event version](event-schema-evolution.md#failure-modes) the reader no longer understands — needs a policy decided by the
 view, not by the deadline. An analytics view can quarantine it and publish a known-incomplete
 figure; a balance or ledger view cannot skip it, because every later value depends on it, and the
 job must stop for a human.

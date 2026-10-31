@@ -150,11 +150,16 @@ lessons:
     group: data-modeling
     tags: [ data-modeling, tier-2-distributed ]
     sidebar_position: 4
+  event-schema-evolution.md:
+    title: "Event Schema Evolution"
+    group: data-modeling
+    tags: [ data-modeling, tier-2-distributed ]
+    sidebar_position: 5
   message-delivery-semantics.md:
     title: Message Delivery Semantics
     group: data-modeling
     tags: [ data-modeling, tier-1-foundations, messaging ]
-    sidebar_position: 5
+    sidebar_position: 6
   api-contracts.md:
     title: "API Contracts & Versioning"
     group: api-design

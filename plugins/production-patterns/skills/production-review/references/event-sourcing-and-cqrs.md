@@ -7,6 +7,7 @@ so choose it for a reason.
 Part of the data-modeling set: [retention & history](data-retention-and-history.md) ·
 [temporal data](temporal-data.md) · **event sourcing & CQRS** (this file) ·
 [event replay & rebuild](event-replay-and-projection-rebuild.md) ·
+[event schema evolution](event-schema-evolution.md) ·
 [message delivery](message-delivery-semantics.md)
 
 ## Contents
@@ -90,7 +91,8 @@ Properties that make an event store trustworthy:
 - **Optimistic concurrency on append** — write expecting version N, fail if another writer got
   there. See [locking](optimistic-vs-pessimistic-locking.md).
 - **Versioned schemas.** Events live forever, so your five-year-old `V1` event must still be
-  readable by today's code. This obligation never goes away and is the most underestimated cost.
+  readable by today's code. This obligation never goes away and is the most underestimated cost —
+  see [event schema evolution](event-schema-evolution.md).
 
 ## The hidden debt: replay cost
 
@@ -191,7 +193,8 @@ state is *derived from money or legally significant movements* — ledgers, wall
 - [ ] The choice between CRUD, audit log, and event sourcing is justified by a real question
 - [ ] Events are named in the past tense and stored append-only, with `UPDATE`/`DELETE` revoked
 - [ ] Events are ordered per aggregate with a version, and appends use optimistic concurrency
-- [ ] Event schema versioning is planned; old event versions remain readable
+- [ ] Event schema versioning is planned; old event versions remain readable — see
+      [event schema evolution](event-schema-evolution.md)
 - [ ] Corrections are compensating events, never edits to stored events
 - [ ] Snapshots exist before production history accumulates, triggered by event count
 - [ ] Snapshots are rebuildable and never the sole source of a value
