@@ -20,7 +20,9 @@ Part of the storage set: [storage engines](storage-engines.md) ·
 - [Failover loses data, by design](#failover-loses-data-by-design)
 - [Sharding: the key is the architecture](#sharding-the-key-is-the-architecture)
 - [Hot shards](#hot-shards)
+- [Consistent hashing](#consistent-hashing)
 - [What you give up](#what-you-give-up)
+- [Rebalancing is a race you start early](#rebalancing-is-a-race-you-start-early)
 - [CAP, concretely](#cap-concretely)
 - [Review checklist](#review-checklist)
 
@@ -224,6 +226,35 @@ faced them:
 - **Rebalancing** — adding shards moves data. Consistent hashing or a directory layer makes this
   survivable; `hash % N` makes adding a shard a migration of nearly everything.
 
+## Rebalancing is a race you start early
+
+Moving a shard's data is copying terabytes over the same disks and network that are serving
+production. That sets up a race with two ways to lose:
+
+- **Copy fast** and the migration's reads and writes compete with live queries — latency on the
+  source shard climbs exactly when it is already the busiest one, because that is why it is being
+  split.
+- **Copy slowly** and the source keeps growing while you drain it. Started at 90% full, a throttled
+  move can lose to the growth rate and the shard runs out of disk mid-migration.
+
+So the trigger is a **capacity threshold well below full** — commonly 60–70% of disk or of write
+headroom, typical rather than universal — together with a measured copy rate, so the time to move
+is known before it is needed. A rebalance planned at 90% is an incident with extra steps.
+
+The move itself must be online and verifiable, in this order:
+
+1. **Start capturing changes** for the moving key range (dual-write, or tail the source's change
+   stream) *before* copying, so nothing written during the copy is missed.
+2. **Backfill** the existing rows, throttled against the source's latency, not a fixed rate.
+3. **Verify** — row counts and checksums per key range — before any reads move.
+4. **Cut over** routing for the range, keeping the source read-only for a rollback window.
+5. **Delete** from the source only after the window, as a separate step.
+
+Each step is resumable and idempotent; a migration that has to restart from zero after a failure at
+80% will not finish under load. Systems with a directory layer or many small logical shards per
+node (Vitess, Citus, Cassandra vnodes) make this routine; with a few large physical shards it is a
+project every time.
+
 ## CAP, concretely
 
 Under a **network partition** you choose:
@@ -255,6 +286,8 @@ made it accidentally, and usually inconsistently.
 - [ ] No range sharding on an ever-growing key (timestamp, auto-increment) — every write would hit the newest shard
 - [ ] Cross-shard joins, transactions, uniqueness, and pagination each have an answer
 - [ ] Rebalancing strategy avoids `hash % N` requiring a full migration
+- [ ] A capacity threshold well below full triggers rebalancing, and the copy time at that size is known
+- [ ] Shard moves capture changes before backfilling, verify by checksum, and keep the source until a rollback window passes
 - [ ] CP-vs-AP is decided per data class and written down
 - [ ] Key distribution uses consistent hashing with virtual nodes, not `hash % N`
 - [ ] Adding or removing a node moves ~1/N of keys, not nearly all of them
@@ -262,7 +295,7 @@ made it accidentally, and usually inconsistently.
 ---
 
 *Synthesized from TechCraft's Database Internals parts P11–P12 and P14
-([collection](https://www.patreon.com/collection/2115129)), Distributed Systems parts P15, P17–P18, and Replication & Scaling P12
+([collection](https://www.patreon.com/collection/2115129)), Distributed Systems parts P15, P17–P18, and Replication & Scaling P12 and P19
 ([collection](https://www.patreon.com/collection/2351128)). The
 replication-lag framing, the
 shard-by-access-pattern rule, the hot-shard trap, and the "CA is theory only" argument are
