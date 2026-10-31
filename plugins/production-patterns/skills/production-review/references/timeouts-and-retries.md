@@ -7,7 +7,8 @@ Part of the distributed set: [network & latency](network-and-latency.md) ·
 **timeouts & retries** (this file) ·
 [circuit breakers & bulkheads](circuit-breakers-and-bulkheads.md) ·
 [consensus & leader election](consensus-and-leader-election.md) ·
-[designing for failure](designing-for-failure.md)
+[designing for failure](designing-for-failure.md) ·
+[multi-region failover](multi-region-failover.md)
 
 ## Contents
 

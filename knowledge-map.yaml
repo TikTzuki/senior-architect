@@ -205,6 +205,11 @@ lessons:
     group: distributed-systems
     tags: [ distributed-systems, tier-2-distributed ]
     sidebar_position: 5
+  multi-region-failover.md:
+    title: "Multi-Region Failover"
+    group: distributed-systems
+    tags: [ distributed-systems, tier-2-distributed ]
+    sidebar_position: 6
   payment-state-and-idempotency.md:
     title: "Payment State & Idempotency"
     group: payments
