@@ -1,6 +1,6 @@
 {
   "name": "production-patterns",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Review code against a growing library of production system-design lessons — the failure modes that only appear under concurrency, retries, and timeouts — and design systems from requirements with a compressed system-design primer",
   "author": {
     "name": "tiktuzki",
