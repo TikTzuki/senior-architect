@@ -19,6 +19,7 @@ Part of the distributed set: [network & latency](network-and-latency.md) ·
 - [How leader election actually works](#how-leader-election-actually-works)
 - [Split brain](#split-brain)
 - [Fencing](#fencing)
+- [Leader churn](#leader-churn)
 - [The cost, and when to pay it](#the-cost-and-when-to-pay-it)
 - [Do not build this](#do-not-build-this)
 - [Review checklist](#review-checklist)
@@ -143,6 +144,44 @@ In practice: a version or epoch column checked on write, a database row lock, or
 supports conditional writes. Without fencing, leader election reduces to *usually* one leader, which
 is fine for a cron job and not fine for money.
 
+## Leader churn
+
+The failure detector behind an election is a timeout, and a timeout cannot tell a dead leader from
+a slow one. Set it tighter than the system's bad moments and the cluster deposes healthy leaders:
+
+- **Network jitter or packet loss** delays a few heartbeats past the election timeout.
+- **A stop-the-world pause** — GC, a VM steal spike, a container CPU throttle — freezes the leader
+  long enough for followers to give up on it.
+- **A slow disk.** A Raft leader must persist each entry before it counts its own vote, and so must
+  every follower before it acknowledges. On shared or network storage an `fsync` can take hundreds
+  of milliseconds, and heartbeats queued behind it miss the deadline.
+
+Each of these produces an election that changes nothing except the leader's identity — and every
+one costs a write outage while it happens, dropped client connections, and, where the data
+replicates asynchronously behind the leader, possibly the last few acknowledged writes (see
+[replica placement & quorums](replica-placement-and-quorums.md)). The cluster looks healthy on
+every dashboard that samples state rather than counting transitions.
+
+The timeouts are a budget, and the budget has to cover the worst normal case, not the average:
+
+```
+etcd       heartbeat-interval ≈ round-trip time; election-timeout ≈ 10× that
+           (defaults 100 ms / 1000 ms); WAL fsync p99 should stay under ~10 ms
+Patroni    loop_wait + 2 × retry_timeout ≤ ttl — the defaults 10 + 2×10 = 30 sit exactly on
+           the limit, so one slow DCS call during a loop can cost the primary its leader key
+```
+
+Two related costs. **Write latency is set by the slowest member the quorum needs**, not the
+fastest: with three nodes the leader waits for the quicker of two followers, so one slow node is
+hidden and two are not. And **the consensus store's own disk is on the critical path** of every
+write — which is why etcd asks for dedicated SSDs, and why a Kubernetes control plane on slow
+storage shows up as API-server timeouts long before anyone looks at etcd.
+
+The signal to watch is **the rate of leader changes**, not whether a leader exists. A leader that
+exists at every scrape can still change twenty times a day. Alert on churn
+(`etcd_server_leader_changes_seen_total`, Patroni's failover history, a broker's controller
+changes), and treat a non-zero baseline as a bug to find, not as the system working.
+
 ## The cost, and when to pay it
 
 Consensus is expensive: a majority round trip per decision, throughput bounded by the leader, and
@@ -188,6 +227,8 @@ untested failover is an assumption, exactly like an unrestored backup.
 - [ ] Leases are not treated as correctness guarantees for money or inventory
 - [ ] Each "single leader" requirement is classified efficiency vs correctness
 - [ ] Loss of quorum is monitored and alerted on
+- [ ] Leader *changes* are counted and alerted on, not just leader presence
+- [ ] Election and lease timeouts are derived from measured p99 network, pause and disk-sync times, with margin
 - [ ] Leader failover has been tested, not just configured
 - [ ] Consensus stores metadata, not the high-volume data path
 - [ ] Manual promotion during incidents is gated to prevent creating a second leader
@@ -196,5 +237,8 @@ untested failover is an assumption, exactly like an unrestored backup.
 
 *Synthesized from TechCraft's Distributed Systems series, part P16
 ([collection](https://www.patreon.com/techcraft_official)). The "who decides the next truth" framing
-and the incident scenario are TechCraft's; the quorum arithmetic, Raft walkthrough, fencing treatment,
-and checklist are this repository's.*
+and the incident scenario are TechCraft's, as are the points in Replication & Scaling P10 and
+P18 ([collection](https://www.patreon.com/collection/2351128)) that jittery networks cause repeated
+elections, that timeouts must be tuned to p99 latency, and that a slow quorum member sets write
+latency; the quorum arithmetic, Raft walkthrough, fencing treatment,
+the leader-churn budget figures, and checklist are this repository's.*
