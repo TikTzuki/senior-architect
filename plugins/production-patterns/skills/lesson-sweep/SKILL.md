@@ -107,4 +107,5 @@ Report it as a table: post → decision → lesson file → gate result. Then sh
 
 **Do not commit or push.** The user reviews the diff first. If they ask to commit, use one
 commit per lesson, `feat: add <topic> lesson` / `docs: extend <topic> lesson`, and confirm
-`git status` shows nothing under `dev-insider-docs/`.
+`git status` shows nothing under `dev-insider-docs/`. Before pushing, bump the plugin version once
+for the whole batch — see [lesson-add](../lesson-add/SKILL.md) step 8.

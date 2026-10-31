@@ -100,6 +100,20 @@ test -f references/<topic>.md && echo "lesson file present"
 grep -c "^  <topic>.md:" ../../../../knowledge-map.yaml   # must be 1: it will publish
 ```
 
+**8. Bump the plugin version before pushing.** An installed plugin is cached by version, so a
+`claude plugin update` that sees the same version reports "already at the latest version" and keeps
+the old lessons — the new one never reaches anyone. Bump **once per push**, not per commit: a minor
+version if the push adds a lesson, a patch version if it only extends or fixes existing ones. Change
+both places, which must agree:
+
+```bash
+# plugins/production-patterns/.claude-plugin/plugin.json      "version"
+# .claude-plugin/marketplace.json → the production-patterns entry's "version"
+python3 scripts/validate-marketplace.py
+```
+
+Commit it as `chore(production-patterns): release <version>`, naming the lessons it ships.
+
 ## Writing guidance
 
 Write for an engineer who will read this while reviewing a diff under time pressure.
